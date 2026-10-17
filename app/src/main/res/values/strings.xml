@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">فيديو كات</string>
+    <string name="pick">اختار فيديو</string>
+    <string name="play_pause">تشغيل / إيقاف</string>
+    <string name="start_label">البداية: %s</string>
+    <string name="end_label">النهاية: %s</string>
+    <string name="text_hint">اكتب النص (وبعدين اسحبه على الفيديو)</string>
+    <string name="size_label">حجم الخط</string>
+    <string name="stroke_label">حدود سودا حوالين الحروف</string>
+    <string name="key_hint">مفتاح OpenAI (يبدأ بـ sk-)</string>
+    <string name="transcribe">كابشن تلقائي (تفريغ الصوت)</string>
+    <string name="captions_hint">الكابشن: بداية|نهاية|النص (بالثواني). تقدر تعدّل أو تمسح أي سطر</string>
+    <string name="export">قص وتصدير</string>
+    <string name="status_idle">اختار فيديو للبداية</string>
+    <string name="status_loaded">اضبط البداية والنهاية والنص وبعدين اضغط قص</string>
+    <string name="status_exporting">جاري التصدير...</string>
+    <string name="status_saving">جاري الحفظ في المعرض...</string>
+    <string name="status_done">تم الحفظ في Movies/VideoCut</string>
+    <string name="status_no_size">مقدرتش أقرا أبعاد الفيديو، جرب فيديو تاني</string>
+    <string name="status_no_key">اكتب مفتاح OpenAI الأول</string>
+    <string name="status_audio">جاري استخراج الصوت...</string>
+    <string name="status_transcribing">جاري تفريغ الصوت...</string>
+    <string name="status_too_long">المقطع طويل (الحد 25MB). قصّه الأول وجرب تاني</string>
+    <string name="status_caps_done">تم التفريغ: %d كابشن. راجعهم وعدّل لو محتاج</string>
+    <string name="status_error">حصل خطأ: %s</string>
+    <string name="speed_label">السرعة</string>
+    <string name="filter_label">الفلتر</string>
+    <string name="music_none">مفيش موسيقى</string>
+    <string name="music_set">الموسيقى اتضافت (هتتسمع بدل صوت الفيديو)</string>
+    <string name="music_pick">اختار موسيقى</string>
+    <string name="music_clear">شيل الموسيقى</string>
+    <string name="mute_label">شيل صوت الفيديو الأصلي</string>
+    <string name="plan_free">النسخة المجانية: باقي %1$d من %2$d تصدير النهارده، وعليها علامة مائية</string>
+    <string name="plan_pro">نسخة برو: تصدير بلا حد وبلا علامة مائية</string>
+    <string name="pro_btn">اشترك في برو</string>
+    <string name="pro_soon">الاشتراك هيتفعّل بعد ربط Google Play</string>
+    <string name="status_limit">خلصت تصديرات النسخة المجانية النهارده. جرب بكرة أو اشترك في برو</string>
+    <string-array name="speeds">
+        <item>0.5x</item>
+        <item>1x</item>
+        <item>1.5x</item>
+        <item>2x</item>
+    </string-array>
+    <string-array name="filters">
+        <item>عادي</item>
+        <item>دافي</item>
+        <item>بارد</item>
+        <item>أبيض وأسود</item>
+        <item>تباين</item>
+        <item>سطوع</item>
+    </string-array>
+    <string name="settings_btn">الإعدادات والتحديث</string>
+    <string name="settings_title">الإعدادات</string>
+    <string name="current_version">الإصدار الحالي: %s</string>
+    <string name="upd_check">شيك على التحديث</string>
+    <string name="upd_checking">جاري الفحص...</string>
+    <string name="upd_latest">أنت على آخر نسخة ✅</string>
+    <string name="upd_found">فيه نسخة جديدة: %s</string>
+    <string name="upd_install">حمّل وثبّت التحديث</string>
+    <string name="upd_downloading">جاري تحميل التحديث...</string>
+    <string name="upd_allow_source">اسمح للتطبيق يثبّت التحديثات من الشاشة اللي هتفتح، وبعدين ارجع واضغط الزرار تاني</string>
+    <string name="upd_opening">افتح شاشة التثبيت واضغط تثبيت</string>
+    <string name="upd_error">حصل خطأ: %s</string>
+</resources>
