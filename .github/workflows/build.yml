@@ -1,0 +1,78 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.7
+
+      - name: Prepare release keystore (secrets)
+        env:
+          KS: ${{ secrets.KS_B64 }}
+        run: |
+          if [ -n "$KS" ]; then echo "$KS" | base64 -d > "$RUNNER_TEMP/ks.jks"; fi
+
+      - name: Build direct APK (in-app update)
+        run: gradle assembleDirectDebug --no-daemon
+
+      - name: Build Play release AAB
+        continue-on-error: true
+        run: gradle bundlePlayRelease --no-daemon
+        env:
+          KS_FILE: ${{ runner.temp }}/ks.jks
+          KS_PASS: ${{ secrets.KS_PASS }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.KEY_PASS }}
+
+      - name: Write latest.json (read by the app to offer updates)
+        env:
+          REPO: ${{ github.repository }}
+          RUN_NUMBER: ${{ github.run_number }}
+        run: |
+          python3 - <<'PY'
+          import json, re, os
+          g = open('app/build.gradle', encoding='utf-8').read()
+          vc = int(re.search(r'versionCode\s+(\d+)', g).group(1))
+          vn = re.search(r"versionName\s+'([^']+)'", g).group(1)
+          repo = os.environ['REPO']
+          run = os.environ['RUN_NUMBER']
+          json.dump({'versionCode': vc, 'versionName': vn,
+                     'url': f'https://github.com/{repo}/releases/download/build-{run}/app-direct-debug.apk'},
+                    open('latest.json', 'w', encoding='utf-8'), ensure_ascii=False)
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: VideoCut-debug
+          path: app/build/outputs/apk/direct/debug/*.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: VideoCut-play-aab
+          path: app/build/outputs/bundle/playRelease/*.aab
+          if-no-files-found: ignore
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: Build ${{ github.run_number }}
+          files: |
+            app/build/outputs/apk/direct/debug/app-direct-debug.apk
+            latest.json

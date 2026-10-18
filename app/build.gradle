@@ -1,0 +1,85 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.oneshoot.videocut'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.oneshoot.videocut'
+        minSdk 29
+        targetSdk 35
+        versionCode 8
+        versionName '1.5'
+    }
+
+    // توزيعتين: direct = APK من GitHub وفيه التحديث من داخل التطبيق
+    //           play   = Google Play وفيه الاشتراك، والتحديث بيتم من المتجر
+    flavorDimensions 'dist'
+    productFlavors {
+        direct {
+            dimension 'dist'
+            buildConfigField 'boolean', 'SELF_UPDATE', 'true'
+        }
+        play {
+            dimension 'dist'
+            buildConfigField 'boolean', 'SELF_UPDATE', 'false'
+        }
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    // الـ debug بمفتاح ثابت عشان التحديث يشتغل بين البناءات.
+    // الـ release بيتوقّع المتغيرات دي من GitHub Secrets، ولو مش موجودة بيطلع unsigned.
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+        release {
+            if (System.getenv('KS_FILE')) {
+                storeFile file(System.getenv('KS_FILE'))
+                storePassword System.getenv('KS_PASS')
+                keyAlias System.getenv('KEY_ALIAS')
+                keyPassword System.getenv('KEY_PASS')
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+// kotlin-stdlib 1.8+ فيه jdk7/jdk8 جواه، فنشيل القديمين عشان ما يحصلش Duplicate class
+configurations.all {
+    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
+    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.media3:media3-exoplayer:1.4.1'
+    implementation 'androidx.media3:media3-ui:1.4.1'
+    implementation 'androidx.media3:media3-transformer:1.4.1'
+    implementation 'androidx.media3:media3-effect:1.4.1'
+    implementation 'androidx.media3:media3-common:1.4.1'
+
+    // Google Play Billing (نسخة play بس)
+    playImplementation 'com.android.billingclient:billing:9.1.0'
+}
